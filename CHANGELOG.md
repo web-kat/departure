@@ -16,6 +16,7 @@ Please follow the format in [Keep a Changelog](http://keepachangelog.com/)
 ### Fixed
 
 - Handle special characters in connection's password
+- Allow using bash special characters in passwords
 
 ## [4.0.1] - 2017-08-01
 
