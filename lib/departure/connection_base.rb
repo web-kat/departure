@@ -6,4 +6,6 @@ module Departure
       end
     end
   end
+
+  class OriginalAdapterConnection < ConnectionBase; end
 end
