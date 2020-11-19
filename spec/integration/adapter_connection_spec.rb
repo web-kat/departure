@@ -16,13 +16,25 @@ describe Departure, integration: true do
     ]
   }
 
+  let!(:original_migration_adapter) { ActiveRecord::Migration.original_adapter }
+  let!(:original_connection_config_adapter) { ActiveRecord::Base.connection_config[:adapter] }
+
   def mock_existing_connection
     ActiveRecord::Migration.original_adapter = 'mysql2'
     ActiveRecord::Base.connection_config[:adapter] = 'percona'
   end
 
+  def clean_up_connection_mock
+    ActiveRecord::Migration.original_adapter = original_migration_adapter
+    ActiveRecord::Base.connection_config[:adapter] = original_connection_config_adapter
+  end
+
   before do
     mock_existing_connection
+  end
+
+  after do
+    clean_up_connection_mock
   end
 
   context 'when there are migrations that use departure and migrations that do not' do
@@ -30,6 +42,10 @@ describe Departure, integration: true do
       departure_migrations, non_departure_migrations = migrations.partition(&:uses_departure)
       departure_migrations.each { |migration| migration.class.uses_departure! }
       non_departure_migrations.each { |migration| migration.class.disable_departure! }
+    end
+
+    after do
+      migrations.each { |migration| migration.class.uses_departure! }
     end
 
     it 'does not raise an error' do
