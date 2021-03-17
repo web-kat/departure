@@ -1,4 +1,6 @@
-# Departure ![Build Status](https://img.shields.io/travis/departurerb/departure?style=for-the-badge) ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/departurerb/departure?style=for-the-badge) ![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/departurerb/departure/latest/master?style=for-the-badge)
+# Departure
+
+![Build Status](https://img.shields.io/travis/departurerb/departure?style=for-the-badge) ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/departurerb/departure?style=for-the-badge) ![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/departurerb/departure/latest/master?style=for-the-badge)
 
 Departure is an **ActiveRecord connection adapter** that allows running
 **MySQL online and non-blocking DDL** through `ActiveRecord::Migration` without needing
