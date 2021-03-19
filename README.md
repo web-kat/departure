@@ -1,4 +1,6 @@
-# Departure [![Build Status](https://travis-ci.org/departurerb/departure.svg?branch=master)](https://travis-ci.org/departurerb/departure) [![Code Climate](https://codeclimate.com/github/departurerb/departure/badges/gpa.svg)](https://codeclimate.com/github/departurerb/departure)
+# Departure
+
+![Build Status](https://img.shields.io/travis/departurerb/departure?style=for-the-badge) ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/departurerb/departure?style=for-the-badge) ![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/departurerb/departure/latest/master?style=for-the-badge)
 
 Departure is an **ActiveRecord connection adapter** that allows running
 **MySQL online and non-blocking DDL** through `ActiveRecord::Migration` without needing
@@ -145,7 +147,23 @@ end
 It's strongly recommended to name it after this gems name, such as
 `config/initializers/departure.rb`
 
-### Only enabled on a per-migration basis
+### Disable on per-migration basis
+
+Departure gem is enabled by default. 
+In order to disable it on a particular migration the method `disable_departure!` should be used.
+
+```ruby
+class UseDepartureMigration < ActiveRecord::Migration[5.2]
+  disable_departure!
+
+  def up
+    # ...
+  end
+  # ...
+end
+```
+
+### Enable on per-migration basis
 
 If you wish to only have Departure enabled per-migration, set `config.enabled_by_default = false` in the configure block of your departure initializer.
 
@@ -224,4 +242,7 @@ You can consult the changelog [here](CHANGELOG.md)
 
 The gem is available as open source under the terms of the [MIT
 License](http://opensource.org/licenses/MIT).
+
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/departurerb/departure?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/departurerb/departure?style=for-the-badge)
 
