@@ -1,12 +1,14 @@
 require 'spec_helper'
+require 'fixtures/migrate/0022_add_timestamp_on_comments'
+require 'fixtures/migrate/0023_remove_timestamp_on_comments'
 
 # TODO: Handle #change_table syntax
 describe Departure, integration: true do
   class Comment < ActiveRecord::Base; end
 
-  let(:migration_fixtures) do
-    ActiveRecord::MigrationContext.new([MIGRATION_FIXTURES], ActiveRecord::SchemaMigration).migrations
-  end
+  let(:migration_paths) { [MIGRATION_FIXTURES] }
+  let(:migration_context) { ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration) }
+  let(:migration_fixtures) { migration_context.migrations }
 
   let(:direction) { :up }
   let(:pool) { ActiveRecord::Base.connection_pool }
@@ -202,6 +204,33 @@ describe Departure, integration: true do
           ActiveRecord::Migrator.new(direction, migration_fixtures, ActiveRecord::SchemaMigration, 1).migrate
         end
       end
+    end
+  end
+
+  context 'when there are migrations that use departure and migrations that do not' do
+    Migration = Struct.new(:class, :version, :uses_departure)
+
+    let(:migrations) {
+      [
+        Migration.new(AddTimestampOnComments, 22, true),
+        Migration.new(RemoveTimestampOnComments, 23, false),
+      ]
+    }
+
+    before do
+      allow_any_instance_of(ActiveRecord::Migration).to receive(:original_adapter).and_return('mysql2')
+      migrations.each do |migration|
+        allow(migration.class).to receive(:uses_departure).and_return(migration.uses_departure)
+      end
+      ActiveRecord::Migration.reconnect_without_percona
+    end
+
+    it 'does not raise an error' do
+      expect {
+        migrations.each do |migration|
+          ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration).run(direction, migration.version)
+        end
+      }.to_not raise_error
     end
   end
 end
