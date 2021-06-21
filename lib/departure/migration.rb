@@ -81,7 +81,7 @@ module Departure
     # enabled in a previous migration.
     def reconnect_without_percona
       return unless connection_config[:adapter] == 'percona'
-      Departure::ConnectionBase.establish_connection(connection_config.merge(adapter: original_adapter))
+      Departure::OriginalAdapterConnection.establish_connection(connection_config.merge(adapter: original_adapter))
     end
 
     private

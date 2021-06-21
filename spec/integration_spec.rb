@@ -1,12 +1,13 @@
 require 'spec_helper'
+require 'fixtures/migrate/0022_add_timestamp_on_comments'
 
 # TODO: Handle #change_table syntax
 describe Departure, integration: true do
   class Comment < ActiveRecord::Base; end
 
-  let(:migration_fixtures) do
-    ActiveRecord::MigrationContext.new([MIGRATION_FIXTURES], ActiveRecord::SchemaMigration).migrations
-  end
+  let(:migration_paths) { [MIGRATION_FIXTURES] }
+  let(:migration_context) { ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration) }
+  let(:migration_fixtures) { migration_context.migrations }
 
   let(:direction) { :up }
   let(:pool) { ActiveRecord::Base.connection_pool }
@@ -202,6 +203,19 @@ describe Departure, integration: true do
           ActiveRecord::Migrator.new(direction, migration_fixtures, ActiveRecord::SchemaMigration, 1).migrate
         end
       end
+    end
+  end
+
+  context 'when there are migrations that do not use departure' do
+    let(:migration) { AddTimestampOnComments }
+
+    before do
+      allow(migration).to receive(:uses_departure).and_return(false)
+    end
+
+    it 'uses Departure::OriginalConnectionAdapter' do
+      expect(Departure::OriginalAdapterConnection).to receive(:establish_connection)
+      migration_context.run(direction, 22)
     end
   end
 end
