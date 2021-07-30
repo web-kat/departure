@@ -8,10 +8,11 @@ module Departure
     # @param command_line [String]
     # @param error_log_path [String]
     # @param logger [#write_no_newline]
-    def initialize(command_line, error_log_path, logger)
+    def initialize(command_line, error_log_path, logger, redirect_stderr)
       @command_line = command_line
       @error_log_path = error_log_path
       @logger = logger
+      @redirect_stderr = redirect_stderr
     end
 
     # Executes the command returning its status. It also prints its stdout to
@@ -35,7 +36,7 @@ module Departure
 
     private
 
-    attr_reader :command_line, :error_log_path, :logger, :status
+    attr_reader :command_line, :error_log_path, :logger, :status, :redirect_stderr
 
     # Runs the command in a separate process, capturing its stdout and
     # execution status
@@ -60,7 +61,11 @@ module Departure
     #
     # @return [String]
     def full_command
-      "#{command_line} 2> #{error_log_path}"
+      if redirect_stderr
+        "#{command_line} 2> #{error_log_path}"
+      else
+        command_line
+      end
     end
 
     # Validates the status of the execution

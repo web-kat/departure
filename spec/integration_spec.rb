@@ -170,7 +170,7 @@ describe Departure, integration: true do
       it 'runs pt-online-schema-change with the specified arguments' do
         expect(Departure::Command)
           .to receive(:new)
-          .with(/--chunk-time=1/, anything, anything)
+          .with(/--chunk-time=1/, anything, anything, anything)
           .and_return(command)
 
         ClimateControl.modify PERCONA_ARGS: '--chunk-time=1' do
@@ -183,7 +183,7 @@ describe Departure, integration: true do
       it 'runs pt-online-schema-change with the specified arguments' do
         expect(Departure::Command)
           .to receive(:new)
-          .with(/--chunk-time=1 --max-lag=2/, anything, anything)
+          .with(/--chunk-time=1 --max-lag=2/, anything, anything, anything)
           .and_return(command)
 
         ClimateControl.modify PERCONA_ARGS: '--chunk-time=1 --max-lag=2' do
@@ -196,7 +196,7 @@ describe Departure, integration: true do
       it 'runs pt-online-schema-change with the user specified value' do
         expect(Departure::Command)
           .to receive(:new)
-          .with(/--alter-foreign-keys-method=drop_swap/, anything, anything)
+          .with(/--alter-foreign-keys-method=drop_swap/, anything, anything, anything)
           .and_return(command)
 
         ClimateControl.modify PERCONA_ARGS: '--alter-foreign-keys-method=drop_swap' do
