@@ -57,14 +57,14 @@ module Departure
     end
 
     # Builds the actual command including stderr redirection to the specified
-    # log file
+    # log file or stdout
     #
     # @return [String]
     def full_command
       if redirect_stderr
         "#{command_line} 2> #{error_log_path}"
       else
-        command_line
+        "#{command_line} 2>&1"
       end
     end
 
