@@ -64,7 +64,7 @@ describe Departure::Command do
     end
 
     context 'when not redirecting stderr' do
-      let(:expected_command) { command }
+      let(:expected_command) { "#{command} 2>&1" }
       let(:redirect_stderr) { false }
 
       it 'executes the expected command' do
