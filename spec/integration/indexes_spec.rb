@@ -170,7 +170,7 @@ describe Departure, integration: true do
 
   def expect_percona_command(command)
     # Add addional escaping to backticks here to keep the spec more readable.
-    command.gsub!(/`/, '\\\`')
+    command = command.gsub(/`/, '\\\`')
 
     expect(Open3).
       to receive(:popen3).
