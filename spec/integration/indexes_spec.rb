@@ -28,6 +28,8 @@ describe Departure, integration: true do
       end
 
       it 'executes the percona command' do
+        expect_percona_command('ADD INDEX `index_comments_on_some_id_field` (`some_id_field`)')
+
         ActiveRecord::Migrator.new(
           direction,
           migration_fixtures,
@@ -70,6 +72,8 @@ describe Departure, integration: true do
       end
 
       it 'executes the percona command' do
+        expect_percona_command('DROP INDEX `index_comments_on_some_id_field`')
+
         ActiveRecord::Migrator.new(
           direction,
           migration_fixtures,
@@ -101,11 +105,14 @@ describe Departure, integration: true do
       end
 
       it 'executes the percona command' do
+        expect_percona_command('ADD INDEX `new_index_comments_on_some_id_field` (`some_id_field`)')
+        expect_percona_command('DROP INDEX `index_comments_on_some_id_field`')
+
         ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration).run(direction, version)
         expect(:comments).to have_index('new_index_comments_on_some_id_field')
       end
 
-      it 'marks the migration as down' do
+      it 'marks the migration as up' do
         ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration).run(direction, version)
         expect(ActiveRecord::Migrator.current_version).to eq(version)
       end
@@ -123,6 +130,8 @@ describe Departure, integration: true do
       end
 
       it 'executes the percona command' do
+        expect_percona_command('ADD UNIQUE INDEX `index_comments_on_some_id_field` (`some_id_field`)')
+
         ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration).run(direction, version)
 
         expect(unique_indexes_from(:comments))
@@ -144,6 +153,8 @@ describe Departure, integration: true do
       end
 
       it 'executes the percona command' do
+        expect_percona_command('DROP INDEX `index_comments_on_some_id_field`')
+
         ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration).run(direction, version)
 
         expect(unique_indexes_from(:comments))
@@ -155,5 +166,15 @@ describe Departure, integration: true do
         expect(ActiveRecord::Migrator.current_version).to eq(1)
       end
     end
+  end
+
+  def expect_percona_command(command)
+    # Add addional escaping to backticks here to keep the spec more readable.
+    command.gsub!(/`/, '\\\`')
+
+    expect(Open3).
+      to receive(:popen3).
+      with(a_string_matching(/\Apt-online-schema-change .+--alter "#{Regexp.escape(command)}"/)).
+      and_call_original
   end
 end

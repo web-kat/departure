@@ -129,9 +129,8 @@ module ActiveRecord
       # @param options [Hash] optional
       def add_index(table_name, column_name, options = {})
         if ActiveRecord::VERSION::STRING >= '6.1'
-          index, algorithm, if_not_exists = add_index_options(table_name, column_name, options)
-          create_index = CreateIndexDefinition.new(index, algorithm, if_not_exists)
-          execute schema_creation.accept(create_index)
+          index_definition, _ = add_index_options(table_name, column_name, options)
+          execute "ALTER TABLE #{quote_table_name(index_definition.table)} ADD #{schema_creation.accept(index_definition)}"
         else
           index_name, index_type, index_columns, index_options = add_index_options(table_name, column_name, options)
           execute "ALTER TABLE #{quote_table_name(table_name)} ADD #{index_type} INDEX #{quote_column_name(index_name)} (#{index_columns})#{index_options}" # rubocop:disable Metrics/LineLength
