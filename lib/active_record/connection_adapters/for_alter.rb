@@ -59,8 +59,8 @@ module ForAlterStatements
     "ADD #{index_type} INDEX #{quote_column_name(index_name)} #{index_using} (#{index_columns})#{index_algorithm}"
   end
 
-  def remove_index_for_alter(table_name, options = {})
-    index_name = index_name_for_remove(table_name, options)
+  def remove_index_for_alter(table_name, column_name, options = {})
+    index_name = index_name_for_remove(table_name, column_name, options)
     "DROP INDEX #{quote_column_name(index_name)}"
   end
 
