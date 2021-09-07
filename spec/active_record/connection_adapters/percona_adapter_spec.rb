@@ -125,7 +125,7 @@ describe ActiveRecord::ConnectionAdapters::DepartureAdapter do
 
       let(:expected_sql) do
         if ActiveRecord::VERSION::STRING >= '6.1'
-          "CREATE INDEX_TYPE INDEX `#{index_name}` ON `#{table_name}` (`#{column_name}`)"
+          "ALTER TABLE `#{table_name}` ADD #{index_type} INDEX `#{index_name}` (`#{column_name}`)"
         else
           "ALTER TABLE `#{table_name}` ADD #{index_type} INDEX `#{index_name}` (#{column_name})"
         end
