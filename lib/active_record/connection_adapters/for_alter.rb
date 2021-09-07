@@ -52,11 +52,17 @@ module ForAlterStatements
   end
 
   def add_index_for_alter(table_name, column_name, options = {})
-    index_name, index_type, index_columns, _,
-      index_algorithm, index_using = add_index_options(table_name, column_name, options)
+    if ActiveRecord::VERSION::STRING >= '6.1'
+      index_definition, = add_index_options(table_name, column_name, options)
 
-    index_algorithm[0, 0] = ', ' if index_algorithm.present?
-    "ADD #{index_type} INDEX #{quote_column_name(index_name)} #{index_using} (#{index_columns})#{index_algorithm}"
+      "ADD #{schema_creation.accept(index_definition)}"
+    else
+      index_name, index_type, index_columns, _,
+        index_algorithm, index_using = add_index_options(table_name, column_name, options)
+      index_algorithm[0, 0] = ', ' if index_algorithm.present?
+
+      "ADD #{index_type} INDEX #{quote_column_name(index_name)} #{index_using} (#{index_columns})#{index_algorithm}"
+    end
   end
 
   def remove_index_for_alter(table_name, column_name, options = {})
