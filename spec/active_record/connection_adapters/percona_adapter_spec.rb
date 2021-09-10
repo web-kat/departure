@@ -174,7 +174,7 @@ describe ActiveRecord::ConnectionAdapters::DepartureAdapter do
           receive(:execute)
           .with("ALTER TABLE `#{table_name}` DROP INDEX `index_name`")
         )
-        adapter.remove_index(table_name, options)
+        adapter.remove_index(table_name, **options)
       end
     end
   end
