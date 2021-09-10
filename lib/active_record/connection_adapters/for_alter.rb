@@ -32,7 +32,7 @@ module ForAlterStatements
     }.merge(options)
 
     td = create_table_definition(table_name)
-    cd = td.new_column_definition(column.name, type, options)
+    cd = td.new_column_definition(column.name, type, **options)
     schema_creation.accept(ActiveRecord::ConnectionAdapters::ChangeColumnDefinition.new(cd, column.name))
   end
 
@@ -47,18 +47,18 @@ module ForAlterStatements
     columns_sql = "SHOW COLUMNS FROM #{quote_table_name(table_name)} LIKE #{quote(column_name)}"
     current_type = exec_query(columns_sql, 'SCHEMA').first['Type']
     td = create_table_definition(table_name)
-    cd = td.new_column_definition(new_column_name, current_type, options)
+    cd = td.new_column_definition(new_column_name, current_type, **options)
     schema_creation.accept(ActiveRecord::ConnectionAdapters::ChangeColumnDefinition.new(cd, column.name))
   end
 
   def add_index_for_alter(table_name, column_name, options = {})
     if ActiveRecord::VERSION::STRING >= '6.1'
-      index_definition, = add_index_options(table_name, column_name, options)
+      index_definition, = add_index_options(table_name, column_name, **options)
 
       "ADD #{schema_creation.accept(index_definition)}"
     else
       index_name, index_type, index_columns, _,
-        index_algorithm, index_using = add_index_options(table_name, column_name, options)
+        index_algorithm, index_using = add_index_options(table_name, column_name, **options)
       index_algorithm[0, 0] = ', ' if index_algorithm.present?
 
       "ADD #{index_type} INDEX #{quote_column_name(index_name)} #{index_using} (#{index_columns})#{index_algorithm}"
@@ -83,7 +83,7 @@ module ForAlterStatements
 
   def add_column_for_alter(table_name, column_name, type, options = {})
     td = create_table_definition(table_name)
-    cd = td.new_column_definition(column_name, type, options)
+    cd = td.new_column_definition(column_name, type, **options)
     schema_creation.accept(ActiveRecord::ConnectionAdapters::AddColumnDefinition.new(cd))
   end
 
