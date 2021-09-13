@@ -152,7 +152,7 @@ module ActiveRecord
       def remove_index(table_name, column_name = nil, **options)
         if ActiveRecord::VERSION::STRING >= '6.1'
           return if options[:if_exists] && !index_exists?(table_name, column_name, **options)
-          index_name = index_name_for_remove(table_name, column_name, **options)
+          index_name = index_name_for_remove(table_name, column_name, options)
         else
           index_name = index_name_for_remove(table_name, options)
         end
