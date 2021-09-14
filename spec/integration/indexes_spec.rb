@@ -105,8 +105,7 @@ describe Departure, integration: true do
       end
 
       it 'executes the percona command' do
-        expect_percona_command('ADD INDEX `new_index_comments_on_some_id_field` (`some_id_field`)')
-        expect_percona_command('DROP INDEX `index_comments_on_some_id_field`')
+        expect_percona_command('RENAME INDEX `index_comments_on_some_id_field` TO `new_index_comments_on_some_id_field`')
 
         ActiveRecord::MigrationContext.new(migration_paths, ActiveRecord::SchemaMigration).run(direction, version)
         expect(:comments).to have_index('new_index_comments_on_some_id_field')
