@@ -20,6 +20,7 @@ jobs:
             rails: 5.2.0
           - ruby: 2.7
             rails: 7.0.1
+
     env:
       PERCONA_DB_USER: root
       PERCONA_DB_PASSWORD: root
