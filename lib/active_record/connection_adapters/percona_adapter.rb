@@ -94,7 +94,7 @@ module ActiveRecord
         execute(to_sql(sql, binds), name)
       end
 
-      def exec_query(sql, name = 'SQL', _binds = [])
+      def exec_query(sql, name = 'SQL', _binds = [], **_kwargs)
         result = execute(sql, name)
         ActiveRecord::Result.new(result.fields, result.to_a)
       end
@@ -108,8 +108,8 @@ module ActiveRecord
 
       # Executes a SELECT query and returns an array of record hashes with the
       # column names as keys and column values as values.
-      def select(sql, name = nil, binds = [])
-        exec_query(sql, name, binds)
+      def select(sql, name = nil, binds = [], **kwargs)
+        exec_query(sql, name, binds, kwargs)
       end
 
       # Returns true, as this adapter supports migrations
