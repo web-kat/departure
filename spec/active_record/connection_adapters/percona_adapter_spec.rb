@@ -4,7 +4,13 @@ describe ActiveRecord::ConnectionAdapters::DepartureAdapter do
   describe ActiveRecord::ConnectionAdapters::DepartureAdapter::Column do
     let(:field) { double(:field) }
     let(:default) { double(:default) }
-    let(:cast_type) { ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::MysqlString.new }
+    let(:cast_type) do
+      if defined?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::MysqlString)
+        ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter::MysqlString.new
+      else
+        ActiveRecord::Type.lookup(:string, adapter: :mysql2)
+      end
+    end
     let(:metadata) do
       ActiveRecord::ConnectionAdapters::SqlTypeMetadata.new(
         type: cast_type.type,
