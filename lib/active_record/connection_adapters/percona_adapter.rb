@@ -70,7 +70,7 @@ module ActiveRecord
 
       ADAPTER_NAME = 'Percona'.freeze
 
-      def_delegators :mysql_adapter, :last_inserted_id, :each_hash, :set_field_encoding
+      def_delegators :mysql_adapter, :each_hash, :set_field_encoding
 
       def initialize(connection, _logger, connection_options, _config)
         @mysql_adapter = connection_options[:mysql_adapter]
@@ -186,6 +186,10 @@ module ActiveRecord
       # naming of this method.
       def get_full_version # rubocop:disable Naming/AccessorMethodName
         mysql_adapter.raw_connection.server_info[:version]
+      end
+
+      def last_inserted_id(result)
+        mysql_adapter.send(:last_inserted_id, result)
       end
 
       private
