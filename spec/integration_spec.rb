@@ -207,15 +207,10 @@ describe Departure, integration: true do
   end
 
   context 'when there are migrations that do not use departure' do
-    let(:migration) { AddTimestampOnComments }
-
-    before do
-      allow(migration).to receive(:uses_departure).and_return(false)
-    end
-
     it 'uses Departure::OriginalConnectionAdapter' do
       expect(Departure::OriginalAdapterConnection).to receive(:establish_connection)
-      migration_context.run(direction, 22)
+
+      migration_context.run(direction, 29) # DisableDeparture
     end
   end
 end
