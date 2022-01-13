@@ -91,7 +91,7 @@ module ForAlterStatements
     "DROP COLUMN #{quote_column_name(column_name)}"
   end
 
-  def remove_columns_for_alter(table_name, *column_names)
+  def remove_columns_for_alter(table_name, *column_names, **options)
     column_names.map { |column_name| remove_column_for_alter(table_name, column_name) }
   end
 end
