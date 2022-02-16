@@ -109,7 +109,7 @@ module ActiveRecord
       # Executes a SELECT query and returns an array of record hashes with the
       # column names as keys and column values as values.
       def select(sql, name = nil, binds = [], **kwargs)
-        exec_query(sql, name, binds, kwargs)
+        exec_query(sql, name, binds, **kwargs)
       end
 
       # Returns true, as this adapter supports migrations
@@ -130,13 +130,13 @@ module ActiveRecord
       # @param options [Hash] optional
       def add_index(table_name, column_name, options = {})
         if ActiveRecord::VERSION::STRING >= '6.1'
-          index_definition, = add_index_options(table_name, column_name, options)
+          index_definition, = add_index_options(table_name, column_name, **options)
           execute <<-SQL.squish
             ALTER TABLE #{quote_table_name(index_definition.table)}
               ADD #{schema_creation.accept(index_definition)}
           SQL
         else
-          index_name, index_type, index_columns, index_options = add_index_options(table_name, column_name, options)
+          index_name, index_type, index_columns, index_options = add_index_options(table_name, column_name, **options)
           execute <<-SQL.squish
             ALTER TABLE #{quote_table_name(table_name)}
               ADD #{index_type} INDEX
@@ -152,7 +152,7 @@ module ActiveRecord
       def remove_index(table_name, column_name = nil, **options)
         if ActiveRecord::VERSION::STRING >= '6.1'
           return if options[:if_exists] && !index_exists?(table_name, column_name, **options)
-          index_name = index_name_for_remove(table_name, column_name, **options)
+          index_name = index_name_for_remove(table_name, column_name, options)
         else
           index_name = index_name_for_remove(table_name, options)
         end
