@@ -214,7 +214,6 @@ describe ActiveRecord::ConnectionAdapters::DepartureAdapter do
     let(:sql) { 'SELECT * FROM comments' }
     let(:name) { nil }
     let(:binds) { nil }
-    let(:result_set) { double(fields: [:id], to_a: [1]) }
 
     before do
       allow(runner).to receive(:query).with(sql)
@@ -223,19 +222,42 @@ describe ActiveRecord::ConnectionAdapters::DepartureAdapter do
       )
     end
 
-    it 'executes the sql' do
-      expect(adapter).to(
-        receive(:execute).with(sql, name)
-      ).and_return(result_set)
+    context 'when the adapter returns results' do
+      let(:result_set) { double(fields: [:id], to_a: [1]) }
 
-      adapter.exec_query(sql, name, binds)
+      it 'executes the sql' do
+        expect(adapter).to(
+          receive(:execute).with(sql, name)
+        ).and_return(result_set)
+
+        adapter.exec_query(sql, name, binds)
+      end
+
+      it 'returns an ActiveRecord::Result' do
+        expect(ActiveRecord::Result).to(
+          receive(:new).with(result_set.fields, result_set.to_a)
+        )
+        adapter.exec_query(sql, name, binds)
+      end
     end
 
-    it 'returns an ActiveRecord::Result' do
-      expect(ActiveRecord::Result).to(
-        receive(:new).with(result_set.fields, result_set.to_a)
-      )
-      adapter.exec_query(sql, name, binds)
+    context 'when the adapter returns nil' do
+      let(:result_set) { nil }
+
+      it 'executes the sql' do
+        expect(adapter).to(
+          receive(:execute).with(sql, name)
+        ).and_return(result_set)
+
+        adapter.exec_query(sql, name, binds)
+      end
+
+      it 'returns an ActiveRecord::Result' do
+        expect(ActiveRecord::Result).to(
+          receive(:new).with(result_set.fields, result_set.to_a)
+        )
+        adapter.exec_query(sql, name, binds)
+      end
     end
   end
 
