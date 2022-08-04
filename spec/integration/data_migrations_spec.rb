@@ -43,7 +43,7 @@ describe Departure, integration: true do
     end
   end
 
-  context 'running a migration with .upsert_all' do
+  context 'running a migration with .upsert_all', if: defined?(Comment.upsert_all) do
     let(:version) { 30 }
 
     it 'updates all the required data' do
