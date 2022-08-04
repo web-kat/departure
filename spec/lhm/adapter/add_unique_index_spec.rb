@@ -9,7 +9,7 @@ describe Lhm::Adapter, '#add_unique_index' do
   context 'when passing a single column' do
     before do
       allow(migration).to(
-        receive(:add_index).with(table_name, columns, unique: true)
+        receive(:add_index).with(table_name, columns, { unique: true })
       )
     end
 
@@ -19,7 +19,7 @@ describe Lhm::Adapter, '#add_unique_index' do
 
     it 'calls #add_index in the migration' do
       expect(migration).to(
-        have_received(:add_index).with(table_name, columns, unique: true)
+        have_received(:add_index).with(table_name, columns, { unique: true })
       )
     end
   end
@@ -27,7 +27,7 @@ describe Lhm::Adapter, '#add_unique_index' do
   context 'when passing an array of columns' do
     before do
       allow(migration).to(
-        receive(:add_index).with(table_name, columns, unique: true)
+        receive(:add_index).with(table_name, columns, { unique: true })
       )
     end
 
@@ -37,7 +37,7 @@ describe Lhm::Adapter, '#add_unique_index' do
 
     it 'calls #add_index in the migration' do
       expect(migration).to(
-        have_received(:add_index).with(table_name, columns, unique: true)
+        have_received(:add_index).with(table_name, columns, { unique: true })
       )
     end
   end
@@ -46,7 +46,7 @@ describe Lhm::Adapter, '#add_unique_index' do
     before do
       allow(migration).to(
         receive(:add_index)
-        .with(table_name, columns, unique: true, name: index_name)
+        .with(table_name, columns, { unique: true, name: index_name })
       )
     end
 
@@ -58,7 +58,7 @@ describe Lhm::Adapter, '#add_unique_index' do
     it 'calls #add_index in the migration' do
       expect(migration).to(
         have_received(:add_index)
-        .with(table_name, columns, unique: true, name: index_name)
+        .with(table_name, columns, { unique: true, name: index_name })
       )
     end
   end
