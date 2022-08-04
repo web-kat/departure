@@ -43,6 +43,33 @@ describe Departure, integration: true do
     end
   end
 
+  context 'running a migration with .upsert_all' do
+    let(:version) { 30 }
+
+    it 'updates all the required data' do
+      ActiveRecord::MigrationContext.new(migration_fixtures, ActiveRecord::SchemaMigration).run(
+        direction,
+        version
+      )
+
+      expect(Comment.pluck(:author, :read)).to match_array([
+        [nil, false],
+        [nil, false],
+        ["John", true],
+        ["Smith", false],
+      ])
+    end
+
+    it 'marks the migration as up' do
+      ActiveRecord::MigrationContext.new(migration_fixtures, ActiveRecord::SchemaMigration).run(
+        direction,
+        version
+      )
+
+      expect(ActiveRecord::Migrator.current_version).to eq(version)
+    end
+  end
+
   context 'running a migration with #find_each' do
     let(:version) { 10 }
 
