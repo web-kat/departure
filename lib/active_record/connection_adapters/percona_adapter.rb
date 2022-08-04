@@ -96,7 +96,7 @@ module ActiveRecord
 
       def exec_query(sql, name = 'SQL', _binds = [], **_kwargs)
         result = execute(sql, name)
-        fields = result.field if defined?(result.fields)
+        fields = result.fields if defined?(result.fields)
         ActiveRecord::Result.new(fields, result.to_a)
       end
 

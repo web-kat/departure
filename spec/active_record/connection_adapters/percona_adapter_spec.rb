@@ -254,7 +254,7 @@ describe ActiveRecord::ConnectionAdapters::DepartureAdapter do
 
       it 'returns an ActiveRecord::Result' do
         expect(ActiveRecord::Result).to(
-          receive(:new).with(result_set.fields, result_set.to_a)
+          receive(:new).with(nil, [])
         )
         adapter.exec_query(sql, name, binds)
       end
