@@ -6,6 +6,16 @@ Please follow the format in [Keep a Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
 
+## [6.4.0] - 2020-06-23
+
+- Support for ActiveRecord 6.1.4
+- Relax mysql2 requirement to allow mysql2 0.5.4
+- Support Rails 6' #upsert_all
+
+## [6.3.0] - 2020-06-23
+
+- Support for ActiveRecord 6.1
+
 ## [6.2.0] - 2020-06-23
 
 ### Added
