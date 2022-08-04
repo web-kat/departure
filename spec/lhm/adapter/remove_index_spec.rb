@@ -9,7 +9,7 @@ describe Lhm::Adapter, '#remove_index' do
   context 'when passing a single column' do
     before do
       allow(migration).to(
-        receive(:remove_index).with(table_name, column: columns)
+        receive(:remove_index).with(table_name, { column: columns })
       )
     end
 
@@ -19,7 +19,7 @@ describe Lhm::Adapter, '#remove_index' do
 
     it 'calls #remove_index in the migration' do
       expect(migration).to(
-        have_received(:remove_index).with(table_name, column: columns)
+        have_received(:remove_index).with(table_name, { column: columns })
       )
     end
   end
@@ -27,7 +27,7 @@ describe Lhm::Adapter, '#remove_index' do
   context 'when passing an array of columns' do
     before do
       allow(migration).to(
-        receive(:remove_index).with(table_name, column: columns)
+        receive(:remove_index).with(table_name, { column: columns })
       )
     end
 
@@ -37,7 +37,7 @@ describe Lhm::Adapter, '#remove_index' do
 
     it 'calls #remove_index in the migration' do
       expect(migration).to(
-        have_received(:remove_index).with(table_name, column: columns)
+        have_received(:remove_index).with(table_name, { column: columns })
       )
     end
   end
@@ -45,7 +45,7 @@ describe Lhm::Adapter, '#remove_index' do
   context 'when passing also an index name' do
     before do
       allow(migration).to(
-        receive(:remove_index).with(table_name, name: index_name)
+        receive(:remove_index).with(table_name, { name: index_name })
       )
     end
 
@@ -56,7 +56,7 @@ describe Lhm::Adapter, '#remove_index' do
 
     it 'calls #remove_index in the migration' do
       expect(migration).to(
-        have_received(:remove_index).with(table_name, name: index_name)
+        have_received(:remove_index).with(table_name, { name: index_name })
       )
     end
   end
