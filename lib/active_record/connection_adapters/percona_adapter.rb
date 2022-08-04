@@ -96,7 +96,8 @@ module ActiveRecord
 
       def exec_query(sql, name = 'SQL', _binds = [], **_kwargs)
         result = execute(sql, name)
-        ActiveRecord::Result.new(result.fields, result.to_a)
+        fields = result.fields if defined?(result.fields)
+        ActiveRecord::Result.new(fields, result.to_a)
       end
 
       # Executes a SELECT query and returns an array of rows. Each row is an
