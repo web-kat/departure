@@ -5,7 +5,7 @@ module Departure
     DEFAULT_PORT = 3306
     # Constructor
     #
-    # @param [Hash] connection parametes as used in #establish_conneciton
+    # @param connection_data [Hash] connection parameters as used in #establish_conneciton
     def initialize(connection_data)
       @connection_data = connection_data
     end
@@ -15,7 +15,7 @@ module Departure
     #
     # @return [String]
     def to_s
-      @to_s ||= "#{host_argument} -P #{port} -u #{user} #{password_argument}"
+      @to_s ||= "#{base_connection} -u #{user} #{password_argument}"
     end
 
     # TODO: Doesn't the abstract adapter already handle this somehow?
@@ -40,6 +40,19 @@ module Departure
       end
     end
 
+    private
+
+    attr_reader :connection_data
+
+    # Returns conditionally host or socket configuration
+    #
+    # @return [String]
+    def base_connection
+      return socket_argument if socket.present?
+
+      "#{host_argument} -P #{port}"
+    end
+
     # Returns the host fragment of the details string, adds ssl options if needed
     #
     # @return [String]
@@ -51,9 +64,13 @@ module Departure
       "-h \"#{host_string}\""
     end
 
-    private
-
-    attr_reader :connection_data
+    # Returns the socket fragment of the details string
+    # FIXME: SSL connection
+    #
+    # @return [String]
+    def socket_argument
+      "-S #{socket}"
+    end
 
     # Returns the database host name, defaulting to localhost. If PERCONA_DB_HOST
     # is passed its value will be used instead
@@ -77,6 +94,14 @@ module Departure
     # @return [String]
     def password
       ENV.fetch('PERCONA_DB_PASSWORD', connection_data[:password])
+    end
+
+    # Returns the database socket path. If PERCONA_DB_SOCKET is passed its value
+    # will be used instead
+    #
+    # @return [String]
+    def socket
+      ENV.fetch('PERCONA_DB_SOCKET', connection_data[:socket])
     end
 
     # Returns the database's port.
