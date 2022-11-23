@@ -9,17 +9,17 @@ module Departure
     def initialize(database, table_name)
       @database = database
       @table_name = table_name
-      @added_dsn_items = ENV.fetch('PERCONA_ADDED_DSN_ITEMS', nil)
+      @suffix = ENV.fetch('PERCONA_DSN_SUFFIX', nil)
     end
 
     # Returns the pt-online-schema-change DSN string. See
     # https://www.percona.com/doc/percona-toolkit/2.0/pt-online-schema-change.html#dsn-options
     def to_s
-      "D=#{database},t=#{table_name}#{added_dsn_items.nil? ? nil : ',' + added_dsn_items}"
+      "D=#{database},t=#{table_name}#{suffix.nil? ? nil : ',' + suffix}"
     end
 
     private
 
-    attr_reader :table_name, :database, :added_dsn_items
+    attr_reader :table_name, :database, :suffix
   end
 end
