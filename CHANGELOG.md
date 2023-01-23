@@ -6,6 +6,7 @@ Please follow the format in [Keep a Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
 - Support for connection to MySQL server over socket
+- Support appending items to the general DSN. Used to apply workaround for [PT-2126](https://jira.percona.com/browse/PT-2126)
 
 ## [6.4.0] - 2020-06-23
 
