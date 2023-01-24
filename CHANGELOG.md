@@ -4,11 +4,13 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Please follow the format in [Keep a Changelog](http://keepachangelog.com/)
 
-## [Unreleased]
+## [6.5.0] - 2023-01-24
+
+- Support mysql gem version 0.5.5
 - Support for connection to MySQL server over socket
 - Support appending items to the general DSN. Used to apply workaround for [PT-2126](https://jira.percona.com/browse/PT-2126)
 
-## [6.4.0] - 2020-06-23
+## [6.4.0] - 2022-08-24
 
 - Support for ActiveRecord 6.1.4
 - Relax mysql2 requirement to allow mysql2 0.5.4
