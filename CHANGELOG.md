@@ -4,6 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Please follow the format in [Keep a Changelog](http://keepachangelog.com/)
 
+## [Unreleased]
+
+- Fix support for Rails 6.0 and ForAlter `remove_index` .
+
 ## [6.5.0] - 2023-01-24
 
 - Support mysql gem version 0.5.5
