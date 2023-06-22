@@ -1,7 +1,8 @@
 class ChangeTable < ActiveRecord::Migration[5.1]
   def change
     change_table :comments do |t|
-      t.column :renamable_field, :integer, index: true
+      t.column :renamable_field, :integer
+      t.index :renamable_field
     end
 
     change_table :comments do |t|
